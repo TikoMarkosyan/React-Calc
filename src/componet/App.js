@@ -10,19 +10,19 @@ class App extends Component{
     super(props);
     this.state = {
       value: 0,
-      eexsprethion:false,
-      showres:false,
+      expression:false,
+      showResult:false,
       res:[],
     }
-    this.handeclick = this.handeclick.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
   result(){
     const res = this.state.res;
-    const l = evaluate(res.join(''));
-    res.splice(0,this.state.res.length,l);
+    const finalResult = evaluate(res.join(''));
+    res.splice(0,this.state.res.length,finalResult);
     try {
         this.setState({
-            value: l,
+            value: finalResult,
             res: res
         })
     } catch (e) {
@@ -32,23 +32,23 @@ class App extends Component{
 
     }
   }
-  adddigitnumber(value){
+  addDigitNumber(value){
     this.setState(state => {
       const res = state.res.concat(value);
       return {
         res,
-        eexsprethion:true,
-        showres:false
+        expression:true,
+        showResult:false
       };
     });
   }
-  addsimvol(value){
+  addSimbol(value){
     console.log(this.state.res);
     this.setState(state => {
       const res = state.res.concat(value);
       return {
         res,
-        eexsprethion:false,
+        expression:false,
       };
     });
   }
@@ -56,26 +56,26 @@ class App extends Component{
       if(v === "="){
         this.result();
         this.setState({
-            showres:true
+            showResult:true
         })
       }else if(v === "C"){
         this.setState({
           value: 0,
-          eexsprethion:false,
-          showres:false,
+          expression:false,
+          showResult:false,
           res:[],
         })
       }
   }
-  handeclick(event){
+  handleClick(event){
       if(!isNaN(event.target.value)){
-            this.adddigitnumber(event.target.value);
+            this.addDigitNumber(event.target.value);
       }else{
        const value = event.target.value;
        if(value === "=" || value === "C"){
             this.specialSymbol(value);
       }else{
-        this.addsimvol(value)
+        this.addSimbol(value)
       }
   }
 }
@@ -84,12 +84,12 @@ class App extends Component{
     return (
       <Fragment>
       <div>
-      { this.state.showres ?
+      { this.state.showResult ?
         <Show data={this.state.value}/> :  <Show data={this.state.res.join('')}/>
       }
       </div>
       <div>
-      <Controller click={this.handeclick} disabled={!this.state.eexsprethion}/>
+      <Controller click={this.handleClick} disabled={!this.state.expression}/>
       </div>
       </Fragment>
     )
